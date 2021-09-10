@@ -1,6 +1,6 @@
 <template>
     <div class="editor">
-        <Header>New Memo</Header>
+        <Header>Edit Memo</Header>
         <textarea name="memo" v-model="memoBody"></textarea>
         <button @click="save">保存</button>
     </div>
@@ -10,19 +10,25 @@
 import Header from "@/components/Header.vue";
 
 export default {
-    name: "new",
+    name: 'edit',
     components: {
         Header
     },
     data() {
         return {
-            memoBody: ""
+            memoBody: ''
         }
+    },
+    mounted: function() {
+        let id = this.$route.params['id'];
+        let memo = this.$store.state.memos.slice().find(memo => memo.id == id);
+        this.memoBody = memo.body;
     },
     methods: {
         save() {
-            this.$store.commit('save', {
-                body: this.memoBody
+            this.$store.commit('update',{
+                id: this.$route.params['id'],
+                body: this.memoBody,
             });
             this.$router.push('/');
         }
